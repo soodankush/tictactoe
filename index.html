@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+</head>
+<style>
+    tr,td {
+        border: 1px solid black;
+        padding: 5pc;
+    }
+
+    button {
+        background-color: black;
+        color: black;
+        padding: 1pc;
+        transition: 0.7s;
+    }
+
+    button.active {
+        background-color: aliceblue;
+        color:white;
+        transition: 0.7s;
+        border: 10px orange solid;
+        border-radius: 7px;
+    }
+</style>
+<body>
+<p>Welcome to Tic Tac Toe</p>
+<div>
+    <table id="tictactoe-table">
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div>
+    <button type="button" id="player_1" style="margin-right: 1pc; background-color: red;" disabled>Player 1</button>
+    <button type="button" id="player_2" style="margin-right: 1pc; background-color: green;" disabled>Player 2</button>
+    <button type="button" style="margin-right: 1pc; background-color: white;" onclick="resetGame()">Reset</button>
+</div>
+
+<script>
+  let table = document.getElementById('tictactoe-table')
+  let currentPlayer = 1
+  let activePlayer = document.getElementById(`player_${currentPlayer}`)
+  let player1 = []
+  let player2 = []
+  activePlayer.setAttribute('class', 'active')
+  const winningValue = [
+    [1,2,3],
+    [4,5,6],
+    [7,8,9],
+    [1,5,9],
+    [3,5,7],
+    [1,4,7],
+    [2,5,8],
+    [3,6,9]
+  ]
+
+  const basicSetOfGame = ()=>{
+    let count = 1;
+    for (let i = 0; i < 3; i++) {
+      let row = table.insertRow(i)
+      for (let j = 0; j < 3; j++) {
+        let cell = row.insertCell(j)
+        cell.innerHTML = `${count}`;
+
+        cell.setAttribute('id', `br_${count}`)
+        cell.setAttribute('onclick', 'addToArray(parseInt(this.innerHTML))')
+        cell.setAttribute('style', 'background-color: white;')
+        count += 1
+      }
+    }
+  }
+
+  basicSetOfGame();
+  function addToArray(value) {
+    switch (currentPlayer) {
+      case 1:
+        if(player1.includes(value) || player2.includes(value)) {
+          alert("Element already selected")
+        } else {
+          player1.push(value)
+          player1.sort()
+          document.getElementById(`br_${value}`).style.backgroundColor="red"
+        }
+
+        break;
+      case 2:
+        if(player2.includes(value) || player1.includes(value)) {
+          alert("Element already selected")
+        } else {
+          player2.push(value)
+          player2.sort()
+          document.getElementById(`br_${value}`).style.backgroundColor="green"
+        }
+        break;
+      default:
+        break;
+    }
+    checkIfTheUserIsWinning()
+    passMoveToNextPlayer()
+  }
+
+  function checkIfTheUserIsWinning() {
+
+    if(player1.length >= 3 || player2.length >= 3) {
+      const data = currentPlayer === 1 ? player1 : player2
+      checkIfSetExistsInWinningModel(data)
+    }
+  }
+
+  function resetGame() {
+    player1 = []
+    player2 = []
+    table.deleteRow(0)
+    table.deleteRow(0)
+    table.deleteRow(0)
+    basicSetOfGame();
+  }
+
+  function checkIfSetExistsInWinningModel(playerData) {
+    if(player1.length + player2.length > 9) {
+      alert("Nobody Wins!!!! :(")
+      resetGame()
+    }
+    else{
+      for (let index = 0; index < winningValue.length; index++) {
+        let isWinner = true
+        const winningArray = winningValue[index]
+        for (let arrayIndex = 0; arrayIndex < winningArray.length; arrayIndex++) {
+          if(playerData.includes(winningArray[arrayIndex]) === false) {
+            isWinner = false
+            break
+          }
+        }
+        if(isWinner) {
+          alert(`Player ${currentPlayer} is winner. Game Reset.`)
+          resetGame()
+          break
+        }
+      }
+    }
+  }
+
+  function passMoveToNextPlayer() {
+    document.getElementById(`player_${currentPlayer}`).removeAttribute('class')
+    currentPlayer = currentPlayer === 1 ? 2 : 1
+    document.getElementById(`player_${currentPlayer}`).setAttribute('class', 'active')
+  }
+
+
+</script>
+</body>
+</html>
