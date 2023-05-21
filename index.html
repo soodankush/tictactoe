@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Tic Tac Toe</title>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe</title>
 </head>
 <style>
     tr,td {
@@ -28,15 +28,15 @@
 <body>
 <p>Welcome to Tic Tac Toe</p>
 <div>
-    <table id="tictactoe-table">
-        <tbody>
-        </tbody>
-    </table>
+  <table id="tictactoe-table">
+    <tbody>
+    </tbody>
+  </table>
 </div>
 <div>
-    <button type="button" id="player_1" style="margin-right: 1pc; background-color: red;" disabled>Player 1</button>
-    <button type="button" id="player_2" style="margin-right: 1pc; background-color: green;" disabled>Player 2</button>
-    <button type="button" style="margin-right: 1pc; background-color: white;" onclick="resetGame()">Reset</button>
+  <button type="button" id="player_1" style="margin-right: 1pc; background-color: red;" disabled>Player 1</button>
+  <button type="button" id="player_2" style="margin-right: 1pc; background-color: green;" disabled>Player 2</button>
+  <button type="button" style="margin-right: 1pc; background-color: white;" onclick="resetGame()">Reset</button>
 </div>
 
 <script>
@@ -80,9 +80,9 @@
         if(player1.includes(value) || player2.includes(value)) {
           alert("Element already selected")
         } else {
+          document.getElementById(`br_${value}`).style.backgroundColor="red"
           player1.push(value)
           player1.sort()
-          document.getElementById(`br_${value}`).style.backgroundColor="red"
         }
 
         break;
@@ -90,9 +90,9 @@
         if(player2.includes(value) || player1.includes(value)) {
           alert("Element already selected")
         } else {
+          document.getElementById(`br_${value}`).style.backgroundColor="green"
           player2.push(value)
           player2.sort()
-          document.getElementById(`br_${value}`).style.backgroundColor="green"
         }
         break;
       default:
@@ -111,6 +111,7 @@
   }
 
   function resetGame() {
+    currentPlayer = 1
     player1 = []
     player2 = []
     table.deleteRow(0)
@@ -120,26 +121,26 @@
   }
 
   function checkIfSetExistsInWinningModel(playerData) {
-    if(player1.length + player2.length > 9) {
-      alert("Nobody Wins!!!! :(")
-      resetGame()
-    }
-    else{
-      for (let index = 0; index < winningValue.length; index++) {
-        let isWinner = true
-        const winningArray = winningValue[index]
-        for (let arrayIndex = 0; arrayIndex < winningArray.length; arrayIndex++) {
-          if(playerData.includes(winningArray[arrayIndex]) === false) {
-            isWinner = false
-            break
-          }
-        }
-        if(isWinner) {
-          alert(`Player ${currentPlayer} is winner. Game Reset.`)
-          resetGame()
+
+    for (let index = 0; index < winningValue.length; index++) {
+      let isWinner = true
+      const winningArray = winningValue[index]
+      for (let arrayIndex = 0; arrayIndex < winningArray.length; arrayIndex++) {
+        if(playerData.includes(winningArray[arrayIndex]) === false) {
+          isWinner = false
           break
         }
       }
+      if(isWinner) {
+        alert(`Player ${currentPlayer} is winner. Game Reset.`)
+        resetGame()
+        break
+      }
+    }
+
+    if(player1.length + player2.length === 9 ){
+      alert(`Nobody won. Game reset`)
+      resetGame()
     }
   }
 
